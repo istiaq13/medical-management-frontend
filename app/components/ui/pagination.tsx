@@ -57,7 +57,7 @@ export function Pagination({ meta, onPageChange, isLoading }: PaginationProps) {
                     disabled={isLoading}
                     className={`h-8 w-8 rounded-lg text-xs font-semibold transition ${
                       p === page
-                        ? 'bg-teal-600 text-white shadow-sm'
+                        ? 'bg-[#2563EB] text-white shadow-sm'
                         : 'text-slate-600 hover:bg-slate-200/60'
                     }`}
                   >

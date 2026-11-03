@@ -132,7 +132,7 @@ export function DoctorPatientsModal({
         {/* Top bar with Add button or Back button */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Users className="h-4 w-4 text-teal-600" />
+            <Users className="h-4 w-4 text-[#2563EB]" />
             <span className="text-xs font-bold text-slate-700">
               Total Assigned: {patientsData?.length ?? 0}
             </span>
@@ -164,9 +164,9 @@ export function DoctorPatientsModal({
         {isAdding ? (
           <form
             onSubmit={handleSubmit(handleAddPatient)}
-            className="rounded-xl border border-teal-100 bg-teal-50/20 p-5 space-y-4 animate-in fade-in duration-200"
+            className="rounded-xl border border-blue-100 bg-blue-50/20 p-5 space-y-4 animate-in fade-in duration-200"
           >
-            <h4 className="text-xs font-bold uppercase tracking-wider text-teal-800">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-blue-800">
               New Patient Information
             </h4>
 

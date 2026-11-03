@@ -119,4 +119,41 @@ body {
   will-change: transform, opacity;
 }
 
+/* Sidebar Option Switching & Page Transitions */
+@keyframes sidebarPillPop {
+  0% {
+    transform: scale(0.96) translateX(-3px);
+    opacity: 0.85;
+  }
+  60% {
+    transform: scale(1.01) translateX(1px);
+  }
+  100% {
+    transform: scale(1) translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-sidebar-pill {
+  animation: sidebarPillPop 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes pageGlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-page-in {
+  animation: pageGlideIn 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+
 

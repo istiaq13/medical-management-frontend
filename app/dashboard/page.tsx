@@ -59,9 +59,9 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8 pb-10">
       {/* Top Banner with Quick Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-teal-900 via-slate-900 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-lg">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-blue-950 via-slate-900 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-lg">
         <div className="space-y-1">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-500/20 px-3 py-1 text-xs font-semibold text-teal-300">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-semibold text-blue-300">
             <TrendingUp className="h-3.5 w-3.5" /> Performance & Clinical Insights
           </span>
           <h2 className="text-2xl font-black tracking-tight text-white">
@@ -85,7 +85,7 @@ export default function DashboardPage() {
             Refresh
           </Button>
           <Link href="/doctors">
-            <Button size="sm" className="bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold h-9">
+            <Button size="sm" className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold h-9 shadow-sm shadow-blue-600/30">
               <UserPlus className="h-3.5 w-3.5 mr-1.5" />
               Manage Doctors
             </Button>
@@ -96,13 +96,13 @@ export default function DashboardPage() {
       {/* Metrics Row */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
         {/* Total Doctors */}
-        <Card className="relative overflow-hidden border-teal-100 bg-gradient-to-br from-white to-teal-50/30">
+        <Card className="relative overflow-hidden border-blue-100 bg-gradient-to-br from-white to-blue-50/30">
           <div className="p-6">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-teal-700">
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-700">
                 Total Doctors
               </span>
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-600">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-[#2563EB]">
                 <Stethoscope className="h-5 w-5" />
               </div>
             </div>
@@ -184,7 +184,7 @@ export default function DashboardPage() {
                 <CardTitle>Monthly Patient Registrations</CardTitle>
                 <CardDescription>Intake velocity and hospital traffic over time</CardDescription>
               </div>
-              <span className="rounded-md bg-teal-50 px-2 py-1 text-[11px] font-semibold text-teal-700">
+              <span className="rounded-md bg-blue-50 px-2 py-1 text-[11px] font-semibold text-blue-700">
                 Date-based Stat
               </span>
             </div>
@@ -208,7 +208,7 @@ export default function DashboardPage() {
               </div>
               <Link
                 href="/doctors"
-                className="flex items-center gap-1 text-xs font-semibold text-teal-600 hover:text-teal-700 hover:underline"
+                className="flex items-center gap-1 text-xs font-semibold text-[#2563EB] hover:text-blue-700 hover:underline"
               >
                 View Doctors <ArrowUpRight className="h-3.5 w-3.5" />
               </Link>
@@ -233,7 +233,7 @@ export default function DashboardPage() {
               </div>
               <Link
                 href="/patients"
-                className="flex items-center gap-1 text-xs font-semibold text-teal-600 hover:text-teal-700 hover:underline"
+                className="flex items-center gap-1 text-xs font-semibold text-[#2563EB] hover:text-blue-700 hover:underline"
               >
                 View Patients <ArrowUpRight className="h-3.5 w-3.5" />
               </Link>

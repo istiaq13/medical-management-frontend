@@ -28,12 +28,6 @@ export function DashboardLayout({
         description: 'Comprehensive medical records, assigned physicians, and clinical conditions.',
       };
     }
-    if (pathname.includes('/roles')) {
-      return {
-        title: 'Role-Based Access Control',
-        description: 'System roles and granular authorization permission management.',
-      };
-    }
     return {
       title: 'Clinical Analytics Dashboard',
       description: 'Real-time overview of physician workloads, patient trends, and medical statistics.',
@@ -65,7 +59,9 @@ export function DashboardLayout({
         />
 
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#F4F7FB]">
-          <div className="w-full">{children}</div>
+          <div key={pathname} className="w-full animate-page-in">
+            {children}
+          </div>
         </main>
       </div>
     </div>

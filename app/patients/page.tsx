@@ -110,7 +110,7 @@ export default function PatientsPage() {
 
         <Button
           onClick={() => setIsCreateModalOpen(true)}
-          className="bg-teal-600 hover:bg-teal-700 shadow-md shadow-teal-700/20 text-xs font-bold"
+          className="bg-[#2563EB] hover:bg-[#1D4ED8] shadow-md shadow-blue-600/20 text-xs font-bold"
         >
           <Plus className="h-4 w-4 mr-1.5" />
           Register Patient
@@ -289,7 +289,7 @@ export default function PatientsPage() {
                         {doctor ? (
                           <div>
                             <p className="font-semibold text-slate-800 text-xs flex items-center gap-1">
-                              <Stethoscope className="h-3.5 w-3.5 text-teal-600" />
+                              <Stethoscope className="h-3.5 w-3.5 text-[#2563EB]" />
                               Dr. {doctor.name}
                             </p>
                             <p className="text-[11px] text-slate-400">
