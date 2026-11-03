@@ -9,14 +9,14 @@ interface ConditionPieChartProps {
 }
 
 const COLORS = [
-  '#0d9488',
-  '#0ea5e9',
-  '#6366f1',
-  '#f59e0b',
-  '#ec4899',
-  '#10b981',
-  '#8b5cf6',
-  '#64748b',
+  '#2563EB', // Royal Blue
+  '#0D9488', // Teal
+  '#6366F1', // Indigo
+  '#F59E0B', // Amber
+  '#EC4899', // Pink
+  '#10B981', // Emerald
+  '#8B5CF6', // Purple
+  '#64748B', // Slate
 ];
 
 export function ConditionPieChart({ data }: ConditionPieChartProps) {
@@ -35,11 +35,12 @@ export function ConditionPieChart({ data }: ConditionPieChartProps) {
           <Tooltip
             contentStyle={{
               backgroundColor: '#0f172a',
-              borderRadius: '8px',
+              borderRadius: '12px',
               border: 'none',
               color: '#ffffff',
               fontSize: '12px',
-              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.2)',
+              padding: '10px 14px',
             }}
             formatter={(value: any) => [`${value} Patients`, 'Total']}
           />
@@ -55,8 +56,8 @@ export function ConditionPieChart({ data }: ConditionPieChartProps) {
             nameKey="condition"
             cx="50%"
             cy="45%"
-            innerRadius={50}
-            outerRadius={80}
+            innerRadius={52}
+            outerRadius={84}
             paddingAngle={3}
           >
             {data.map((_, index) => (
@@ -69,3 +70,4 @@ export function ConditionPieChart({ data }: ConditionPieChartProps) {
   );
 }
 
+export default ConditionPieChart;

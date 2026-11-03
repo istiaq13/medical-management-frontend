@@ -17,7 +17,7 @@ interface SpecializationChartProps {
   data: SpecializationStat[];
 }
 
-const COLORS = ['#14b8a6', '#3b82f6', '#8b5cf6', '#f43f5e', '#f97316', '#10b981'];
+const COLORS = ['#2563EB', '#3B82F6', '#0D9488', '#6366F1', '#F59E0B', '#10B981'];
 
 export function SpecializationChart({ data }: SpecializationChartProps) {
   if (!data || data.length === 0) {
@@ -37,23 +37,24 @@ export function SpecializationChart({ data }: SpecializationChartProps) {
           margin={{ top: 10, right: 20, left: 30, bottom: 0 }}
         >
           <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-          <XAxis type="number" stroke="#94a3b8" fontSize={12} tickLine={false} allowDecimals={false} />
+          <XAxis type="number" stroke="#94a3b8" fontSize={11} tickLine={false} allowDecimals={false} />
           <YAxis
             type="category"
             dataKey="specialization"
             stroke="#94a3b8"
-            fontSize={12}
+            fontSize={11}
             tickLine={false}
             axisLine={false}
           />
           <Tooltip
             contentStyle={{
               backgroundColor: '#0f172a',
-              borderRadius: '8px',
+              borderRadius: '12px',
               border: 'none',
               color: '#ffffff',
               fontSize: '12px',
-              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.2)',
+              padding: '10px 14px',
             }}
             formatter={(value: any) => [`${value} Doctors`, 'Total']}
           />
@@ -68,3 +69,4 @@ export function SpecializationChart({ data }: SpecializationChartProps) {
   );
 }
 
+export default SpecializationChart;

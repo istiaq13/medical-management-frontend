@@ -43,21 +43,21 @@ export function PatientTrendsChart({ data }: PatientTrendsChartProps) {
         <AreaChart data={formattedData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="patientTrendGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#0d9488" stopOpacity={0.4} />
-              <stop offset="95%" stopColor="#0d9488" stopOpacity={0.0} />
+              <stop offset="5%" stopColor="#2563EB" stopOpacity={0.25} />
+              <stop offset="95%" stopColor="#2563EB" stopOpacity={0.0} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
           <XAxis
             dataKey="label"
             stroke="#94a3b8"
-            fontSize={12}
+            fontSize={11}
             tickLine={false}
             axisLine={{ stroke: '#e2e8f0' }}
           />
           <YAxis
             stroke="#94a3b8"
-            fontSize={12}
+            fontSize={11}
             tickLine={false}
             axisLine={false}
             allowDecimals={false}
@@ -65,11 +65,12 @@ export function PatientTrendsChart({ data }: PatientTrendsChartProps) {
           <Tooltip
             contentStyle={{
               backgroundColor: '#0f172a',
-              borderRadius: '8px',
+              borderRadius: '12px',
               border: 'none',
               color: '#ffffff',
               fontSize: '12px',
-              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.2)',
+              padding: '10px 14px',
             }}
             formatter={(value: any) => [`${value} Patients`, 'Registrations']}
             labelFormatter={(label) => `Month: ${label}`}
@@ -77,8 +78,8 @@ export function PatientTrendsChart({ data }: PatientTrendsChartProps) {
           <Area
             type="monotone"
             dataKey="count"
-            stroke="#0d9488"
-            strokeWidth={3}
+            stroke="#2563EB"
+            strokeWidth={2.5}
             fillOpacity={1}
             fill="url(#patientTrendGrad)"
           />
@@ -88,3 +89,4 @@ export function PatientTrendsChart({ data }: PatientTrendsChartProps) {
   );
 }
 
+export default PatientTrendsChart;

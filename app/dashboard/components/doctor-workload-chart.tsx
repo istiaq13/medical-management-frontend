@@ -17,8 +17,6 @@ interface DoctorWorkloadChartProps {
   data: PatientsPerDoctor[];
 }
 
-const COLORS = ['#0d9488', '#0284c7', '#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'];
-
 export function DoctorWorkloadChart({ data }: DoctorWorkloadChartProps) {
   if (!data || data.length === 0) {
     return (
@@ -42,13 +40,13 @@ export function DoctorWorkloadChart({ data }: DoctorWorkloadChartProps) {
           <XAxis
             dataKey="shortName"
             stroke="#94a3b8"
-            fontSize={12}
+            fontSize={11}
             tickLine={false}
             axisLine={{ stroke: '#e2e8f0' }}
           />
           <YAxis
             stroke="#94a3b8"
-            fontSize={12}
+            fontSize={11}
             tickLine={false}
             axisLine={false}
             allowDecimals={false}
@@ -56,20 +54,25 @@ export function DoctorWorkloadChart({ data }: DoctorWorkloadChartProps) {
           <Tooltip
             contentStyle={{
               backgroundColor: '#0f172a',
-              borderRadius: '8px',
+              borderRadius: '12px',
               border: 'none',
               color: '#ffffff',
               fontSize: '12px',
-              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.2)',
+              padding: '10px 14px',
             }}
             formatter={(value: any, _, item: any) => [
               `${value} Patients`,
               `${item.payload.name} (${item.payload.specialization})`,
             ]}
           />
-          <Bar dataKey="patientCount" radius={[6, 6, 0, 0]}>
+          <Bar dataKey="patientCount" radius={[6, 6, 0, 0]} fill="#2563EB">
             {formattedData.map((_, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              <Cell
+                key={`cell-${index}`}
+                fill={index === 0 ? '#1D4ED8' : '#2563EB'}
+                className="hover:opacity-85 transition"
+              />
             ))}
           </Bar>
         </BarChart>
@@ -78,3 +81,4 @@ export function DoctorWorkloadChart({ data }: DoctorWorkloadChartProps) {
   );
 }
 
+export default DoctorWorkloadChart;
