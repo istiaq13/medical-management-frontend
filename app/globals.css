@@ -104,6 +104,24 @@ body {
   will-change: transform, opacity;
 }
 
+/* Page Slide Left-to-Right Transition */
+@keyframes slideLeftToRight {
+  0% {
+    opacity: 0;
+    transform: translateX(-24px);
+    filter: brightness(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: brightness(1);
+  }
+}
+
+.animate-slide-left-to-right {
+  animation: slideLeftToRight 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .animate-backdrop-in {
   animation: backdropFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   will-change: opacity;

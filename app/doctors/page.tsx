@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { Doctor, ApiResponse, DashboardAnalytics } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -36,6 +37,7 @@ import {
 } from 'lucide-react';
 
 export default function DoctorsPage() {
+  const router = useRouter();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -552,7 +554,9 @@ export default function DoctorsPage() {
                     return (
                       <tr
                         key={doc._id}
-                        className="group hover:bg-[#F8FAFC] transition duration-150 border-b border-slate-200/40"
+                        onClick={() => router.push(`/doctors/${doc._id}`)}
+                        className="group hover:bg-blue-50/40 transition duration-150 border-b border-slate-200/40 cursor-pointer"
+                        title="Click to view full doctor details page"
                       >
                         {/* ID (gray) + Copy Icon */}
                         <td className="py-3.5 px-3 whitespace-nowrap">
@@ -562,7 +566,10 @@ export default function DoctorsPage() {
                             </span>
                             <button
                               type="button"
-                              onClick={() => handleCopy(customId, 'Doctor ID')}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCopy(customId, 'Doctor ID');
+                              }}
                               className="rounded p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
                               title="Copy ID"
                             >
@@ -589,7 +596,10 @@ export default function DoctorsPage() {
                             <span>{doc.phone}</span>
                             <button
                               type="button"
-                              onClick={() => handleCopy(doc.phone, 'Phone number')}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCopy(doc.phone, 'Phone number');
+                              }}
                               className="rounded p-1 text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition cursor-pointer"
                               title="Copy Phone"
                             >
@@ -616,11 +626,14 @@ export default function DoctorsPage() {
                         {/* Patients Count with Pill Button */}
                         <td className="py-3.5 px-3 text-center whitespace-nowrap">
                           <button
-                            onClick={() => setPatientsDoctor(doc)}
-                            className="inline-flex items-center gap-1 rounded-full bg-teal-50 hover:bg-teal-100 border border-teal-200 px-2.5 py-1 text-[11px] font-bold text-teal-800 transition cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPatientsDoctor(doc);
+                            }}
+                            className="inline-flex items-center gap-1 rounded-full bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-1 text-[11px] font-bold text-[#2563EB] transition cursor-pointer"
                             title="View/manage corresponding patients"
                           >
-                            <Users className="h-3 w-3 text-teal-600" />
+                            <Users className="h-3 w-3 text-[#2563EB]" />
                             <span>{doc.patientCount ?? 0}</span>
                           </button>
                         </td>
@@ -639,15 +652,21 @@ export default function DoctorsPage() {
                         <td className="py-3.5 px-3 text-right whitespace-nowrap">
                           <div className="flex items-center justify-end gap-1">
                             <button
-                              onClick={() => setEditingDoctor(doc)}
-                              className="flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-800 transition"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEditingDoctor(doc);
+                              }}
+                              className="flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-800 transition cursor-pointer"
                               title="Edit Doctor"
                             >
                               <Edit2 className="h-3.5 w-3.5" />
                             </button>
                             <button
-                              onClick={() => setDeletingDoctor(doc)}
-                              className="flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setDeletingDoctor(doc);
+                              }}
+                              className="flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition cursor-pointer"
                               title="Delete Doctor"
                             >
                               <Trash2 className="h-3.5 w-3.5" />

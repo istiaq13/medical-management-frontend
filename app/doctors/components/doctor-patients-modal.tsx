@@ -50,14 +50,19 @@ export function DoctorPatientsModal({
     data: patientsData,
     isLoading,
     refetch,
-  } = useQuery({
+  } = useQuery<Patient[]>({
     queryKey: ['doctor-patients', doctor?._id],
     queryFn: async () => {
       if (!doctor?._id) return [];
-      const res = await apiClient.get<ApiResponse<Patient[]>>(
+      const res = await apiClient.get<any>(
         `/doctors/${doctor._id}/patients?limit=50`
       );
-      return res.data.data;
+      const raw = res.data;
+      if (Array.isArray(raw)) return raw;
+      if (Array.isArray(raw?.data)) return raw.data;
+      if (Array.isArray(raw?.data?.patients)) return raw.data.patients;
+      if (Array.isArray(raw?.patients)) return raw.patients;
+      return [];
     },
     enabled: isOpen && !!doctor?._id,
   });

@@ -59,7 +59,7 @@ export function DeleteDoctorDialog({
         </div>
 
         <div className="flex items-center justify-end gap-2 pt-2">
-          <Button variant="outline" size="sm" onClick={onClose} disabled={isDeleting}>
+          <Button variant="outline" size="sm" onClick={onClose} disabled={isDeleting} className="rounded-full">
             Cancel
           </Button>
           <Button
@@ -67,6 +67,7 @@ export function DeleteDoctorDialog({
             size="sm"
             onClick={handleDelete}
             isLoading={isDeleting}
+            className="rounded-full"
           >
             Delete Doctor
           </Button>
