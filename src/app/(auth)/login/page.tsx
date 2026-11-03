@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -21,6 +21,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
+import { apiClient } from '@/lib/api-client';
 import { toast } from 'sonner';
 
 const loginSchema = z.object({
@@ -34,6 +35,37 @@ export default function LoginPage() {
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isBackendReady, setIsBackendReady] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const checkHealth = async () => {
+      try {
+        const res = await apiClient.get('/health');
+        if (res.data && (res.data.status === 'ok' || res.status === 200)) {
+          if (isMounted) {
+            setIsBackendReady(true);
+          }
+          return;
+        }
+      } catch (err) {
+        // Backend spinning up on Render free tier
+      }
+
+      if (isMounted) {
+        timeoutId = setTimeout(checkHealth, 2500);
+      }
+    };
+
+    checkHealth();
+
+    return () => {
+      isMounted = false;
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []);
 
   const {
     register,
@@ -193,10 +225,21 @@ export default function LoginPage() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isSubmitting}
-              className="w-full rounded-md bg-[#009AA6] py-3 text-sm font-bold text-white shadow-sm hover:bg-[#008792] active:bg-[#00737d] transition duration-150 disabled:opacity-70 flex items-center justify-center gap-2 cursor-pointer mt-2"
+              disabled={!isBackendReady || isSubmitting}
+              className={`w-full rounded-md py-3 text-sm font-bold text-white shadow-sm transition duration-150 flex items-center justify-center gap-2 mt-2 ${
+                !isBackendReady
+                  ? 'bg-[#009AA6]/80 cursor-wait'
+                  : isSubmitting
+                  ? 'bg-[#009AA6]/85 cursor-wait'
+                  : 'bg-[#009AA6] hover:bg-[#008792] active:bg-[#00737d] cursor-pointer'
+              }`}
             >
-              {isSubmitting ? (
+              {!isBackendReady ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin text-white" />
+                  <span>Backend starting...</span>
+                </>
+              ) : isSubmitting ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin text-white" />
                   <span>Signing In...</span>
