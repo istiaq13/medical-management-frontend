@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -64,9 +65,14 @@ export function DoctorModal({ isOpen, onClose, doctor, onSuccess }: DoctorModalP
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
   // Smooth entry, exit & success animation states
+  const [mounted, setMounted] = useState(false);
   const [isRendered, setIsRendered] = useState(isOpen);
   const [isClosing, setIsClosing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const {
     register,
@@ -114,7 +120,7 @@ export function DoctorModal({ isOpen, onClose, doctor, onSuccess }: DoctorModalP
         });
       }
       setAvatarPreview(null);
-    } else {
+    } else if (isRendered) {
       setIsClosing(true);
       const timer = setTimeout(() => {
         setIsRendered(false);
@@ -122,7 +128,7 @@ export function DoctorModal({ isOpen, onClose, doctor, onSuccess }: DoctorModalP
       }, 280);
       return () => clearTimeout(timer);
     }
-  }, [isOpen, doctor, reset]);
+  }, [isOpen, doctor, reset, isRendered]);
 
   // Handle smooth closing animation
   const handleClose = () => {
@@ -154,7 +160,7 @@ export function DoctorModal({ isOpen, onClose, doctor, onSuccess }: DoctorModalP
     };
   }, [isRendered]);
 
-  if (!isRendered) return null;
+  if (!mounted || !isRendered) return null;
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -209,8 +215,8 @@ export function DoctorModal({ isOpen, onClose, doctor, onSuccess }: DoctorModalP
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   };
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] overflow-hidden">
       {/* Dimmed backdrop with smooth fade in/out */}
       <div
         className={`fixed inset-0 bg-slate-900/40 backdrop-blur-xs cursor-pointer ${
@@ -221,7 +227,7 @@ export function DoctorModal({ isOpen, onClose, doctor, onSuccess }: DoctorModalP
       />
 
       {/* Slide-over Right Drawer Container */}
-      <div className="fixed inset-y-0 right-0 flex max-w-full pl-10 pointer-events-none">
+      <div className="fixed inset-y-0 right-0 flex max-w-full pl-10 pointer-events-none z-[101]">
         <div
           className={`w-screen max-w-lg bg-white shadow-2xl flex flex-col h-full border-l border-slate-200 pointer-events-auto ${
             isClosing ? 'animate-drawer-out' : 'animate-drawer-in'
@@ -519,7 +525,8 @@ export function DoctorModal({ isOpen, onClose, doctor, onSuccess }: DoctorModalP
           </form>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

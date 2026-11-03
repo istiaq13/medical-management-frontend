@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -21,6 +22,12 @@ export function Modal({
   children,
   maxWidth = 'lg',
 }: ModalProps) {
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -39,7 +46,7 @@ export function Modal({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!mounted || !isOpen) return null;
 
   const maxWidthClasses = {
     sm: 'max-w-sm',
@@ -49,8 +56,8 @@ export function Modal({
     '2xl': 'max-w-2xl',
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm animate-backdrop-in"
@@ -82,6 +89,7 @@ export function Modal({
 
         <div className="max-h-[calc(85vh-8rem)] overflow-y-auto p-6">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
