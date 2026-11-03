@@ -53,7 +53,7 @@ export function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm animate-backdrop-in"
         onClick={onClose}
       />
 
@@ -62,7 +62,7 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         className={cn(
-          'relative z-10 w-full overflow-hidden rounded-2xl bg-white shadow-2xl transition-all border border-slate-100 animate-in fade-in zoom-in-95 duration-200',
+          'relative z-10 w-full overflow-hidden rounded-2xl bg-white shadow-2xl border border-slate-100 animate-modal-in',
           maxWidthClasses[maxWidth]
         )}
       >

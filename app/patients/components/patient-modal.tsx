@@ -128,7 +128,7 @@ export function PatientModal({ isOpen, onClose, patient, onSuccess }: PatientMod
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
             label="Patient Full Name"
-            placeholder="Johnathan Davis"
+            placeholder="Enter patient full name"
             error={errors.name?.message}
             {...register('name')}
           />
