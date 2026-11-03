@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { Patient, Doctor, ApiResponse, DashboardAnalytics } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -34,6 +35,7 @@ import {
 } from 'lucide-react';
 
 export default function PatientsPage() {
+  const router = useRouter();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -530,10 +532,11 @@ export default function PatientsPage() {
               <tr>
                 <th className="py-3 px-3">ID</th>
                 <th className="py-3 px-3">Patient Name</th>
+                <th className="py-3 px-3">Gender</th>
+                <th className="py-3 px-3">Age</th>
+                <th className="py-3 px-3">Number</th>
                 <th className="py-3 px-3">Clinical Condition</th>
                 <th className="py-3 px-3">Attending Physician</th>
-                <th className="py-3 px-3">Demographics</th>
-                <th className="py-3 px-3">Contact</th>
                 <th className="py-3 px-3">Admitted Date</th>
                 <th className="py-3 px-3 text-right">Action</th>
               </tr>
@@ -549,10 +552,11 @@ export default function PatientsPage() {
                         <Skeleton className="h-4 w-32 rounded" />
                       </div>
                     </td>
+                    <td className="py-4 px-3"><Skeleton className="h-4 w-14 rounded" /></td>
+                    <td className="py-4 px-3"><Skeleton className="h-4 w-12 rounded" /></td>
+                    <td className="py-4 px-3"><Skeleton className="h-4 w-24 rounded" /></td>
                     <td className="py-4 px-3"><Skeleton className="h-5 w-24 rounded-full" /></td>
                     <td className="py-4 px-3"><Skeleton className="h-4 w-36 rounded" /></td>
-                    <td className="py-4 px-3"><Skeleton className="h-4 w-20 rounded" /></td>
-                    <td className="py-4 px-3"><Skeleton className="h-4 w-24 rounded" /></td>
                     <td className="py-4 px-3"><Skeleton className="h-4 w-18 rounded" /></td>
                     <td className="py-4 px-3 text-right"><Skeleton className="h-7 w-14 ml-auto rounded-full" /></td>
                   </tr>
@@ -569,9 +573,11 @@ export default function PatientsPage() {
                   return (
                     <tr
                       key={patient._id}
-                      className="group hover:bg-blue-50/40 transition duration-150 border-b border-slate-200/40"
+                      onClick={() => router.push(`/patients/${patient._id}`)}
+                      className="group hover:bg-blue-50/40 transition duration-150 border-b border-slate-200/40 cursor-pointer"
+                      title="Click to view full patient details"
                     >
-                      {/* ID with Copy */}
+                      {/* 1. ID with Copy */}
                       <td className="py-3.5 px-3 whitespace-nowrap">
                         <div className="flex items-center gap-1.5">
                           <span className="text-xs font-semibold text-slate-500 tracking-tight">
@@ -579,7 +585,10 @@ export default function PatientsPage() {
                           </span>
                           <button
                             type="button"
-                            onClick={() => handleCopy(customId, 'Patient ID')}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCopy(customId, 'Patient ID');
+                            }}
                             className="rounded p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
                             title="Copy ID"
                           >
@@ -588,38 +597,52 @@ export default function PatientsPage() {
                         </div>
                       </td>
 
-                      {/* Name with Avatar */}
+                      {/* 2. Patient Name with User DP Icon (matching doctors) */}
                       <td className="py-3.5 px-3 whitespace-nowrap">
                         <div className="flex items-center gap-2.5">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-600 border border-blue-100 shrink-0 font-bold text-xs">
-                            {patient.name.slice(0, 2).toUpperCase()}
+                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-600 border border-blue-100 shrink-0">
+                            <User className="h-4.5 w-4.5" />
                           </div>
-                          <div>
-                            <p className="font-bold text-slate-900 group-hover:text-blue-600 transition">
-                              {patient.name}
-                            </p>
-                            {patient.email ? (
-                              <p className="text-xs text-slate-400 font-medium">{patient.email}</p>
-                            ) : (
-                              <p className="text-xs text-slate-400 italic">No email</p>
-                            )}
-                          </div>
+                          <p className="font-bold text-slate-900 group-hover:text-blue-600 transition">
+                            {patient.name}
+                          </p>
                         </div>
                       </td>
 
-                      {/* Condition Badge */}
-                      <td className="py-3.5 px-3 whitespace-nowrap">
-                        <span
-                          className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-semibold ${getConditionBadgeStyle(
-                            patient.condition
-                          )}`}
-                        >
-                          <HeartPulse className="h-3 w-3" />
-                          {patient.condition}
-                        </span>
+                      {/* 3. Gender */}
+                      <td className="py-3.5 px-3 whitespace-nowrap text-slate-700 font-semibold text-xs">
+                        <span className="capitalize">{patient.gender.toLowerCase()}</span>
                       </td>
 
-                      {/* Attending Doctor */}
+                      {/* 4. Age */}
+                      <td className="py-3.5 px-3 whitespace-nowrap text-slate-700 font-semibold text-xs">
+                        {patient.age} yrs
+                      </td>
+
+                      {/* 5. Number (Phone) with Copy */}
+                      <td className="py-3.5 px-3 whitespace-nowrap">
+                        <div className="flex items-center gap-1.5 font-mono text-xs text-slate-700 font-medium">
+                          <span>{patient.phone}</span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCopy(patient.phone, 'Phone number');
+                            }}
+                            className="rounded p-1 text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition cursor-pointer"
+                            title="Copy Phone"
+                          >
+                            <Copy className="h-3 w-3" />
+                          </button>
+                        </div>
+                      </td>
+
+                      {/* 6. Clinical Condition (Only text) */}
+                      <td className="py-3.5 px-3 font-semibold text-slate-700 whitespace-nowrap text-xs">
+                        {patient.condition}
+                      </td>
+
+                      {/* 7. Attending Physician */}
                       <td className="py-3.5 px-3 whitespace-nowrap">
                         {doctor ? (
                           <div>
@@ -638,44 +661,29 @@ export default function PatientsPage() {
                         )}
                       </td>
 
-                      {/* Demographics */}
-                      <td className="py-3.5 px-3 whitespace-nowrap text-slate-700 font-semibold text-xs">
-                        {patient.age} yrs •{' '}
-                        <span className="capitalize">{patient.gender.toLowerCase()}</span>
-                      </td>
-
-                      {/* Contact Phone with Copy */}
-                      <td className="py-3.5 px-3 whitespace-nowrap">
-                        <div className="flex items-center gap-1.5 font-mono text-xs text-slate-700 font-medium">
-                          <span>{patient.phone}</span>
-                          <button
-                            type="button"
-                            onClick={() => handleCopy(patient.phone, 'Phone number')}
-                            className="rounded p-1 text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition cursor-pointer"
-                            title="Copy Phone"
-                          >
-                            <Copy className="h-3 w-3" />
-                          </button>
-                        </div>
-                      </td>
-
-                      {/* Admitted Date */}
+                      {/* 8. Admitted Date */}
                       <td className="py-3.5 px-3 whitespace-nowrap text-slate-600 font-medium text-xs">
                         {formatDate(patient.createdAt)}
                       </td>
 
-                      {/* Actions (Pencil & Trash buttons) */}
+                      {/* 9. Action */}
                       <td className="py-3.5 px-3 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-1">
                           <button
-                            onClick={() => setEditingPatient(patient)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditingPatient(patient);
+                            }}
                             className="flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-800 transition cursor-pointer"
                             title="Edit Patient"
                           >
                             <Edit2 className="h-3.5 w-3.5" />
                           </button>
                           <button
-                            onClick={() => setDeletingPatient(patient)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDeletingPatient(patient);
+                            }}
                             className="flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition cursor-pointer"
                             title="Delete Patient"
                           >
@@ -688,7 +696,7 @@ export default function PatientsPage() {
                 })
               ) : (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center">
+                  <td colSpan={9} className="py-12 text-center">
                     <div className="flex flex-col items-center justify-center">
                       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400 mb-3">
                         <Users className="h-6 w-6" />
