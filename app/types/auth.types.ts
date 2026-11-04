@@ -17,3 +17,16 @@ export interface AuthResponse {
   user: User;
 }
 
+export interface CreateAdminUserDto {
+  name: string;
+  email: string;
+  password: string;
+  role?: string;
+}
+
+export interface UpdateAdminUserDto {
+  name?: string;
+  email?: string;
+  password?: string;
+  role?: string;
+}

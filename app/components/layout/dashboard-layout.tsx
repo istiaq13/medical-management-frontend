@@ -16,6 +16,12 @@ export function DashboardLayout({
   const pathname = usePathname();
 
   const getHeaderMeta = () => {
+    if (pathname.includes('/access-control')) {
+      return {
+        title: 'Access Control & Administrators',
+        description: 'Manage administrative roles, security permissions, and authenticated system operators.',
+      };
+    }
     if (pathname.includes('/doctors')) {
       return {
         title: 'Doctor Management',

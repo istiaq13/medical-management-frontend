@@ -22,7 +22,6 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth.context';
 import { apiClient } from '@/lib/api-client';
-import { toast } from 'sonner';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -88,61 +87,61 @@ export default function LoginPage() {
     }
   };
 
-  // 12 circular orbit medical items (matching screenshot ring)
+  // 12 circular orbit medical items with Royal Blue theme
   const orbitIcons = [
     {
       label: 'IV Infusion',
-      icon: <Droplets className="h-4 w-4 text-[#009AA6]" />,
+      icon: <Droplets className="h-4 w-4 text-[#2563EB]" />,
       angle: 285,
     },
     {
       label: 'Cardiology',
-      icon: <HeartPulse className="h-4 w-4 text-[#009AA6]" />,
+      icon: <HeartPulse className="h-4 w-4 text-[#2563EB]" />,
       angle: 320,
     },
     {
       label: 'Injection',
-      icon: <Syringe className="h-4 w-4 text-[#009AA6]" />,
+      icon: <Syringe className="h-4 w-4 text-[#2563EB]" />,
       angle: 355,
     },
     {
       label: 'Medical Kit',
-      icon: <BriefcaseMedical className="h-4 w-4 text-[#009AA6]" />,
+      icon: <BriefcaseMedical className="h-4 w-4 text-[#2563EB]" />,
       angle: 30,
     },
     {
       label: 'Laboratory',
-      icon: <FlaskConical className="h-4 w-4 text-[#009AA6]" />,
+      icon: <FlaskConical className="h-4 w-4 text-[#2563EB]" />,
       angle: 65,
     },
     {
       label: 'Physiotherapy',
-      icon: <Activity className="h-4 w-4 text-[#009AA6]" />,
+      icon: <Activity className="h-4 w-4 text-[#2563EB]" />,
       angle: 100,
     },
     {
       label: 'Records',
-      icon: <ClipboardList className="h-4 w-4 text-[#009AA6]" />,
+      icon: <ClipboardList className="h-4 w-4 text-[#2563EB]" />,
       angle: 135,
     },
     {
       label: 'Pharmacy',
-      icon: <Pill className="h-4 w-4 text-[#009AA6]" />,
+      icon: <Pill className="h-4 w-4 text-[#2563EB]" />,
       angle: 170,
     },
     {
       label: 'Diagnostics',
-      icon: <Microscope className="h-4 w-4 text-[#009AA6]" />,
+      icon: <Microscope className="h-4 w-4 text-[#2563EB]" />,
       angle: 205,
     },
     {
       label: 'Ambulance',
-      icon: <Ambulance className="h-4 w-4 text-[#009AA6]" />,
+      icon: <Ambulance className="h-4 w-4 text-[#2563EB]" />,
       angle: 235,
     },
     {
       label: 'Hospital Bed',
-      icon: <Bed className="h-4 w-4 text-[#009AA6]" />,
+      icon: <Bed className="h-4 w-4 text-[#2563EB]" />,
       angle: 260,
     },
   ];
@@ -155,7 +154,7 @@ export default function LoginPage() {
         <div className="mx-auto w-full max-w-sm py-8 z-10">
           {/* Header Title */}
           <div className="text-center mb-10">
-            <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-[#0B6A78]">
+            <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-[#2563EB]">
               DOCTOR TRACKER
             </h1>
             <p className="mt-1 text-base font-normal text-slate-500">
@@ -167,11 +166,11 @@ export default function LoginPage() {
             {/* Field 1: Email Address */}
             <div className="relative">
               <div
-                className={`relative rounded-md border bg-white px-3.5 pt-2.5 pb-2 transition focus-within:border-[#0B6A78] focus-within:ring-1 focus-within:ring-[#0B6A78] ${
-                  errors.email ? 'border-rose-400' : 'border-slate-300'
+                className={`relative rounded-xl border bg-white px-3.5 pt-2.5 pb-2 transition focus-within:border-[#2563EB] focus-within:ring-2 focus-within:ring-blue-500/15 ${
+                  errors.email ? 'border-rose-400' : 'border-slate-200 hover:border-slate-300'
                 }`}
               >
-                <label className="absolute -top-2.5 left-3 bg-white px-1 text-[11px] font-medium text-slate-500">
+                <label className="absolute -top-2.5 left-3 bg-white px-1 text-[11px] font-semibold text-slate-500">
                   Email Address
                 </label>
                 <input
@@ -182,18 +181,18 @@ export default function LoginPage() {
                 />
               </div>
               {errors.email && (
-                <p className="mt-1 text-xs text-rose-500">{errors.email.message}</p>
+                <p className="mt-1 text-xs text-rose-500 font-medium">{errors.email.message}</p>
               )}
             </div>
 
             {/* Field 2: Password */}
             <div className="relative">
               <div
-                className={`relative rounded-md border bg-white px-3.5 pt-2.5 pb-2 transition focus-within:border-[#0B6A78] focus-within:ring-1 focus-within:ring-[#0B6A78] ${
-                  errors.password ? 'border-rose-400' : 'border-slate-300'
+                className={`relative rounded-xl border bg-white px-3.5 pt-2.5 pb-2 transition focus-within:border-[#2563EB] focus-within:ring-2 focus-within:ring-blue-500/15 ${
+                  errors.password ? 'border-rose-400' : 'border-slate-200 hover:border-slate-300'
                 }`}
               >
-                <label className="absolute -top-2.5 left-3 bg-white px-1 text-[11px] font-medium text-slate-500">
+                <label className="absolute -top-2.5 left-3 bg-white px-1 text-[11px] font-semibold text-slate-500">
                   Password
                 </label>
                 <div className="flex items-center justify-between">
@@ -206,7 +205,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="ml-2 text-slate-400 hover:text-slate-600 focus:outline-none"
+                    className="ml-2 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
                     aria-label="Toggle password visibility"
                   >
                     {showPassword ? (
@@ -218,7 +217,7 @@ export default function LoginPage() {
                 </div>
               </div>
               {errors.password && (
-                <p className="mt-1 text-xs text-rose-500">{errors.password.message}</p>
+                <p className="mt-1 text-xs text-rose-500 font-medium">{errors.password.message}</p>
               )}
             </div>
 
@@ -226,18 +225,18 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={!isBackendReady || isSubmitting}
-              className={`w-full rounded-md py-3 text-sm font-bold text-white shadow-sm transition duration-150 flex items-center justify-center gap-2 mt-2 ${
+              className={`w-full rounded-full py-3 text-sm font-bold text-white shadow-xs transition duration-150 flex items-center justify-center gap-2 mt-2 ${
                 !isBackendReady
-                  ? 'bg-[#009AA6]/80 cursor-wait'
+                  ? 'bg-[#2563EB]/70 cursor-wait'
                   : isSubmitting
-                  ? 'bg-[#009AA6]/85 cursor-wait'
-                  : 'bg-[#009AA6] hover:bg-[#008792] active:bg-[#00737d] cursor-pointer'
+                  ? 'bg-[#2563EB]/85 cursor-wait'
+                  : 'bg-[#2563EB] hover:bg-[#1D4ED8] active:bg-[#1E40AF] cursor-pointer'
               }`}
             >
               {!isBackendReady ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin text-white" />
-                  <span>Backend starting...</span>
+                  <span>Connecting to service...</span>
                 </>
               ) : isSubmitting ? (
                 <>
@@ -255,7 +254,7 @@ export default function LoginPage() {
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-28 opacity-15 overflow-hidden">
           <svg
             viewBox="0 0 1200 200"
-            className="w-full h-full object-cover object-bottom stroke-slate-500 fill-none"
+            className="w-full h-full object-cover object-bottom stroke-slate-400 fill-none"
             strokeWidth="1.2"
           >
             <path d="M0,200 L0,160 L40,160 L40,130 L70,130 L70,160 L120,160 L120,100 L140,80 L160,100 L160,160 L230,160 L230,140 L260,140 L260,160 L320,160 L320,70 L340,40 L360,40 L380,70 L380,160 L450,160 L470,130 L510,130 L530,160 L600,160 L600,110 L630,90 L660,110 L660,160 L750,160 L780,120 L840,120 L870,160 L960,160 L960,60 L980,30 L1000,60 L1000,160 L1080,160 L1100,140 L1140,140 L1160,160 L1200,160 L1200,200 Z" />
@@ -266,19 +265,19 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* RIGHT PANE: Cyan Illustration with Medical Orbit */}
-      <div className="relative hidden lg:flex lg:w-1/2 flex-col items-center justify-center bg-gradient-to-b from-[#E6F8F9] via-[#E2F7F8] to-[#D5F3F5] overflow-hidden p-8 border-l border-[#cdeef1]">
+      {/* RIGHT PANE: Royal Blue Illustration with Medical Orbit */}
+      <div className="relative hidden lg:flex lg:w-1/2 flex-col items-center justify-center bg-gradient-to-b from-[#EFF6FF] via-[#F1F5F9] to-[#DBEAFE] overflow-hidden p-8 border-l border-blue-100">
         {/* Subtle background glow */}
-        <div className="absolute inset-0 bg-radial-gradient from-white/40 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-radial-gradient from-white/60 via-transparent to-transparent pointer-events-none" />
 
         {/* Circular Orbit Graphic */}
         <div className="relative flex items-center justify-center w-[420px] h-[420px]">
           {/* Dashed circular orbit boundary */}
-          <div className="absolute w-[360px] h-[360px] rounded-full border-2 border-dashed border-[#A0E2E8]/90" />
+          <div className="absolute w-[360px] h-[360px] rounded-full border-2 border-dashed border-blue-200" />
 
           {/* Center Brand Badge */}
-          <div className="z-10 text-center select-none bg-white/70 backdrop-blur-xs rounded-full p-8 shadow-sm">
-            <h2 className="text-2xl font-black tracking-tight text-[#0B6A78]">
+          <div className="z-10 text-center select-none bg-white/80 backdrop-blur-xs rounded-full p-8 shadow-sm border border-blue-50">
+            <h2 className="text-2xl font-black tracking-tight text-[#2563EB]">
               DOCTOR TRACKER
             </h2>
             <p className="text-xs font-semibold text-slate-500 mt-0.5">
@@ -286,7 +285,7 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* 11-12 Icons positioned precisely along the perimeter */}
+          {/* 11 Icons positioned precisely along the perimeter */}
           {orbitIcons.map((item, idx) => {
             const radius = 180; // half of 360px
             const rad = (item.angle * Math.PI) / 180;
@@ -300,7 +299,7 @@ export default function LoginPage() {
                   transform: `translate(${x}px, ${y}px)`,
                 }}
                 title={item.label}
-                className="absolute flex h-9 w-9 items-center justify-center rounded-xl bg-white/90 shadow-sm border border-[#A0E2E8]/60 transition-transform hover:scale-115 hover:shadow-md"
+                className="absolute flex h-9 w-9 items-center justify-center rounded-xl bg-white shadow-xs border border-blue-100 transition-transform hover:scale-115 hover:shadow-md cursor-default"
               >
                 {item.icon}
               </div>
@@ -309,10 +308,10 @@ export default function LoginPage() {
         </div>
 
         {/* Faint Architectural Skyline Watermark at bottom of right pane */}
-        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 opacity-25 overflow-hidden">
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 opacity-20 overflow-hidden">
           <svg
             viewBox="0 0 1200 200"
-            className="w-full h-full object-cover object-bottom stroke-[#0B6A78] fill-none"
+            className="w-full h-full object-cover object-bottom stroke-[#2563EB] fill-none"
             strokeWidth="1.2"
           >
             <path d="M0,200 L0,160 L40,160 L40,130 L70,130 L70,160 L120,160 L120,100 L140,80 L160,100 L160,160 L230,160 L230,140 L260,140 L260,160 L320,160 L320,70 L340,40 L360,40 L380,70 L380,160 L450,160 L470,130 L510,130 L530,160 L600,160 L600,110 L630,90 L660,110 L660,160 L750,160 L780,120 L840,120 L870,160 L960,160 L960,60 L980,30 L1000,60 L1000,160 L1080,160 L1100,140 L1140,140 L1160,160 L1200,160 L1200,200 Z" />
