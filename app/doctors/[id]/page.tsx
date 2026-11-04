@@ -30,6 +30,7 @@ import {
   User,
   Plus,
   ChevronDown,
+  ChevronRight,
   UserPlus,
   HeartPulse,
   Activity,
@@ -60,10 +61,16 @@ export default function DoctorDetailPage() {
   const handleToggleAddMenu = () => {
     if (!isAddMenuOpen && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      setMenuCoords({
-        top: rect.bottom + 8,
-        right: Math.max(16, window.innerWidth - rect.right),
-      });
+      const isMobile = window.innerWidth < 640;
+      
+      if (isMobile) {
+        setMenuCoords(null);
+      } else {
+        setMenuCoords({
+          top: rect.bottom + 8,
+          right: Math.max(16, window.innerWidth - rect.right),
+        });
+      }
       setIsAddMenuOpen(true);
     } else {
       setIsAddMenuOpen(false);
@@ -392,71 +399,97 @@ export default function DoctorDetailPage() {
                   aria-hidden="true"
                 />
 
-                {/* Dropdown Menu anchored right below the button */}
+                {/* Dropdown Menu: Bottom-Sheet Drawer on Mobile, Positioned Dropdown on Desktop */}
                 <div
-                  style={{
-                    position: 'fixed',
-                    top: menuCoords ? `${menuCoords.top}px` : '50%',
-                    right: menuCoords ? `${menuCoords.right}px` : '16px',
-                  }}
-                  className="z-[999] w-80 rounded-2xl border border-slate-100 bg-white p-3 shadow-2xl animate-in fade-in slide-in-from-top-3 zoom-in-95 duration-200"
+                  style={
+                    menuCoords
+                      ? {
+                          position: 'fixed',
+                          top: `${menuCoords.top}px`,
+                          right: `${menuCoords.right}px`,
+                        }
+                      : undefined
+                  }
+                  className={`z-[999] bg-white shadow-2xl transition-all duration-200 ${
+                    menuCoords
+                      ? 'w-80 rounded-2xl border border-slate-100 p-3 animate-in fade-in slide-in-from-top-3 zoom-in-95'
+                      : 'fixed bottom-0 inset-x-0 rounded-t-3xl border-t border-slate-200 p-5 pb-8 animate-in slide-in-from-bottom duration-300 max-h-[85vh] overflow-y-auto'
+                  }`}
                 >
-                  <div className="px-2 py-1.5 mb-1 border-b border-slate-100 flex items-center justify-between">
-                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                      Patient Intake Action
-                    </p>
+                  {/* Mobile Grab Handle Bar */}
+                  {!menuCoords && (
+                    <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-slate-300/80" />
+                  )}
+
+                  <div className="px-2 py-1.5 mb-2 border-b border-slate-100 flex items-center justify-between">
+                    <div>
+                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                        Patient Intake Action
+                      </p>
+                      <p className="text-xs text-slate-700 font-semibold mt-0.5">
+                        Choose action for Dr. {doctor.name.replace(/^Dr\.\s*/i, '')}
+                      </p>
+                    </div>
                     <button
                       type="button"
                       onClick={() => setIsAddMenuOpen(false)}
-                      className="text-slate-400 hover:text-slate-600 rounded p-1 transition"
+                      className="text-slate-400 hover:text-slate-600 rounded-full bg-slate-100 p-1.5 transition"
                     >
-                      <X className="h-3.5 w-3.5" />
+                      <X className="h-4 w-4" />
                     </button>
                   </div>
 
-                  {/* Option 1: Add Existing Patient */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsAddMenuOpen(false);
-                      setIsPatientsModalOpen(true);
-                    }}
-                    className="w-full flex items-start gap-3 p-3 rounded-xl hover:bg-blue-50/70 transition-all duration-200 text-left group cursor-pointer hover:translate-x-1"
-                  >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-110 transition-all duration-200 shrink-0 shadow-2xs">
-                      <Users className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition">
-                        Add Existing Patient
-                      </p>
-                      <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
-                        Manage and assign patients already registered in the clinic roster
-                      </p>
-                    </div>
-                  </button>
+                  <div className="space-y-2 mt-2">
+                    {/* Option 1: Add Existing Patient */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsAddMenuOpen(false);
+                        setIsPatientsModalOpen(true);
+                      }}
+                      className="w-full flex items-start gap-3.5 p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50 hover:bg-blue-50/70 hover:border-blue-200 transition-all duration-200 text-left group cursor-pointer"
+                    >
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-105 transition-all duration-200 shrink-0 shadow-2xs">
+                        <Users className="h-5 w-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition">
+                            Add Existing Patient
+                          </p>
+                          <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition" />
+                        </div>
+                        <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+                          Browse clinic roster to assign or unassign existing patients
+                        </p>
+                      </div>
+                    </button>
 
-                  {/* Option 2: Add New Patient */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsAddMenuOpen(false);
-                      setIsNewPatientModalOpen(true);
-                    }}
-                    className="w-full flex items-start gap-3 p-3 rounded-xl hover:bg-blue-50/70 transition-all duration-200 text-left group cursor-pointer hover:translate-x-1 mt-1"
-                  >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-110 transition-all duration-200 shrink-0 shadow-2xs">
-                      <UserPlus className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition">
-                        Add New Patient
-                      </p>
-                      <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
-                        Register a brand new patient profile assigned directly to this doctor
-                      </p>
-                    </div>
-                  </button>
+                    {/* Option 2: Add New Patient */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsAddMenuOpen(false);
+                        setIsNewPatientModalOpen(true);
+                      }}
+                      className="w-full flex items-start gap-3.5 p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50 hover:bg-blue-50/70 hover:border-blue-200 transition-all duration-200 text-left group cursor-pointer"
+                    >
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-105 transition-all duration-200 shrink-0 shadow-2xs">
+                        <UserPlus className="h-5 w-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition">
+                            Add New Patient
+                          </p>
+                          <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition" />
+                        </div>
+                        <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+                          Register a new patient assigned directly to this physician
+                        </p>
+                      </div>
+                    </button>
+                  </div>
                 </div>
               </div>,
               document.body

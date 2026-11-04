@@ -236,7 +236,7 @@ export default function LoginPage() {
               {!isBackendReady ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin text-white" />
-                  <span>Connecting to service...</span>
+                  <span>backend is starting</span>
                 </>
               ) : isSubmitting ? (
                 <>
