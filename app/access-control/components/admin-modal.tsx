@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { User as UserType } from '@/types';
 import { userService } from '@/services/user.service';
+import { getErrorMessage } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
   X,
@@ -176,7 +177,7 @@ export function AdminModal({ isOpen, onClose, admin, onSuccess }: AdminModalProp
         }
       }
     } catch (err: any) {
-      toast.error(err.response?.data?.message || err.message || 'Something went wrong');
+      toast.error(getErrorMessage(err, 'Failed to save admin user.'));
     }
   };
 

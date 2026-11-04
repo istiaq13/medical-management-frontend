@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Doctor } from '@/types';
 import { doctorService } from '@/services/doctor.service';
+import { getErrorMessage } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
   X,
@@ -203,7 +204,7 @@ export function DoctorModal({ isOpen, onClose, doctor, onSuccess }: DoctorModalP
         handleClose();
       }, 550);
     } catch (error: any) {
-      const msg = error.response?.data?.message || 'Operation failed. Please try again.';
+      const msg = getErrorMessage(error, 'Operation failed. Please check the doctor details.');
       toast.error(msg);
     }
   };

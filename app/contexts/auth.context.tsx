@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { User, ApiResponse } from '@/types';
 import { api } from '@/lib/api';
+import { getErrorMessage } from '@/lib/utils';
 import { toast } from 'sonner';
 
 interface AuthContextType {
@@ -70,16 +71,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setToken(receivedToken);
       setUser(receivedUser);
 
-      toast.success('Authentication successful', {
-        description: `Welcome back, Dr. ${receivedUser.name || receivedUser.email}!`,
+      toast.success('Sign in successful', {
+        description: `Welcome back, ${receivedUser.name || receivedUser.email}!`,
       });
 
       router.push('/dashboard');
       return true;
     } catch (error: any) {
-      const message =
-        error.response?.data?.message || 'Invalid credentials or connection timeout';
-      toast.error('Sign-in failed', { description: message });
+      const message = getErrorMessage(error, 'Invalid email or password');
+      toast.error('Sign in failed', {
+        description: message,
+      });
       return false;
     }
   };

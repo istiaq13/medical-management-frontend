@@ -21,7 +21,7 @@ import {
   Phone,
   Calendar,
 } from 'lucide-react';
-import { formatDate } from '@/lib/utils';
+import { formatDate, getErrorMessage } from '@/lib/utils';
 
 interface DoctorPatientsModalProps {
   isOpen: boolean;
@@ -210,7 +210,7 @@ export function DoctorPatientsModal({
       onPatientCountChanged?.();
       setConfirmTarget(null);
     } catch (err: any) {
-      toast.error(err.response?.data?.message || err.message || 'Operation failed');
+      toast.error(getErrorMessage(err, 'Failed to update patient assignment'));
     } finally {
       setIsProcessing(false);
     }

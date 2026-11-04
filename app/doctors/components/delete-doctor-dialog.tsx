@@ -5,6 +5,7 @@ import { Modal } from '@/components/ui/modal';
 import { Button } from '@/components/ui/button';
 import { Doctor } from '@/types';
 import { doctorService } from '@/services/doctor.service';
+import { getErrorMessage } from '@/lib/utils';
 import { toast } from 'sonner';
 import { AlertTriangle } from 'lucide-react';
 
@@ -33,8 +34,7 @@ export function DeleteDoctorDialog({
       onSuccess();
       onClose();
     } catch (err: any) {
-      const msg = err.response?.data?.message || 'Failed to delete doctor';
-      toast.error(msg);
+      toast.error(getErrorMessage(err, 'Failed to delete doctor record.'));
     } finally {
       setIsDeleting(false);
     }

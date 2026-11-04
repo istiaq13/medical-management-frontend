@@ -5,6 +5,7 @@ import { Modal } from '@/components/ui/modal';
 import { Button } from '@/components/ui/button';
 import { User } from '@/types';
 import { userService } from '@/services/user.service';
+import { getErrorMessage } from '@/lib/utils';
 import { toast } from 'sonner';
 import { AlertTriangle } from 'lucide-react';
 
@@ -37,8 +38,7 @@ export function DeleteAdminDialog({
         toast.error(res.message || 'Failed to delete user');
       }
     } catch (err: any) {
-      const msg = err.response?.data?.message || 'Failed to delete admin user';
-      toast.error(msg);
+      toast.error(getErrorMessage(err, 'Failed to delete admin user'));
     } finally {
       setIsDeleting(false);
     }

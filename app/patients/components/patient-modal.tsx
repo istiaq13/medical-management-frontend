@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Patient, Doctor } from '@/types';
 import { patientService } from '@/services/patient.service';
 import { doctorService } from '@/services/doctor.service';
+import { getErrorMessage } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
   X,
@@ -255,7 +256,7 @@ export function PatientModal({ isOpen, onClose, patient, onSuccess, defaultDocto
         handleClose();
       }, 550);
     } catch (error: any) {
-      const msg = error.response?.data?.message || 'Operation failed. Please try again.';
+      const msg = getErrorMessage(error, 'Operation failed. Please verify patient data.');
       toast.error(msg);
     }
   };
