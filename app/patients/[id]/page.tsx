@@ -292,13 +292,6 @@ export default function PatientDetailPage() {
               <p className="text-xs font-medium text-slate-500 mt-0.5">
                 {doctor.specialization} • {doctor.hospital}
               </p>
-              <Link
-                href={`/doctors/${doctor._id}`}
-                className="mt-4 text-xs font-bold text-[#2563EB] hover:text-blue-700 hover:underline transition cursor-pointer flex items-center gap-1"
-              >
-                <span>View Physician Profile</span>
-                <ChevronRight className="h-3.5 w-3.5" />
-              </Link>
             </div>
           ) : (
             <div>

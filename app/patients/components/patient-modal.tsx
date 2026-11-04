@@ -24,6 +24,7 @@ import {
   Check,
   Loader2,
   Camera,
+  Lock,
 } from 'lucide-react';
 
 const COMMON_CONDITIONS = [
@@ -62,9 +63,10 @@ interface PatientModalProps {
   onClose: () => void;
   patient?: Patient | null;
   onSuccess: () => void;
+  defaultDoctorId?: string;
 }
 
-export function PatientModal({ isOpen, onClose, patient, onSuccess }: PatientModalProps) {
+export function PatientModal({ isOpen, onClose, patient, onSuccess, defaultDoctorId }: PatientModalProps) {
   const isEditing = !!patient;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -118,7 +120,14 @@ export function PatientModal({ isOpen, onClose, patient, onSuccess }: PatientMod
   const watchedGender = watch('gender');
   const watchedDoctorId = watch('doctorId');
 
-  const selectedDoctor = doctors.find((d) => d._id === watchedDoctorId);
+  const selectedDoctor = doctors.find((d) => d._id === (defaultDoctorId || watchedDoctorId));
+
+  // Sync defaultDoctorId when modal opens
+  useEffect(() => {
+    if (defaultDoctorId && isOpen) {
+      setValue('doctorId', defaultDoctorId, { shouldValidate: true });
+    }
+  }, [defaultDoctorId, isOpen, setValue]);
 
   // Trigger smooth enter & reset form
   useEffect(() => {
@@ -151,7 +160,7 @@ export function PatientModal({ isOpen, onClose, patient, onSuccess }: PatientMod
           phone: '',
           email: '',
           condition: '',
-          doctorId: '',
+          doctorId: defaultDoctorId || '',
           notes: '',
         });
       }
@@ -227,11 +236,16 @@ export function PatientModal({ isOpen, onClose, patient, onSuccess }: PatientMod
 
   const onSubmit = async (data: PatientFormData) => {
     try {
+      const payload = {
+        ...data,
+        doctorId: defaultDoctorId || data.doctorId,
+      };
+
       if (isEditing && patient) {
-        await patientService.updatePatient(patient._id, data);
+        await patientService.updatePatient(patient._id, payload as any);
         toast.success('Patient record updated successfully');
       } else {
-        await patientService.createPatient(data as any);
+        await patientService.createPatient(payload as any);
         toast.success('Patient registered successfully');
       }
       setIsSuccess(true);
@@ -503,10 +517,13 @@ export function PatientModal({ isOpen, onClose, patient, onSuccess }: PatientMod
                 <Stethoscope className="absolute left-3 h-4 w-4 text-slate-400 pointer-events-none" />
                 <select
                   {...register('doctorId')}
-                  className={`w-full rounded-xl border bg-slate-50/60 pl-9 pr-3.5 py-2.5 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 transition duration-150 ${
-                    errors.doctorId
-                      ? 'border-rose-300 focus:border-rose-500'
-                      : 'border-slate-200 focus:border-[#2563EB]'
+                  disabled={!!defaultDoctorId}
+                  className={`w-full rounded-xl border pl-9 pr-9 py-2.5 text-xs transition duration-150 ${
+                    defaultDoctorId
+                      ? 'bg-slate-100/90 border-slate-200 text-slate-800 font-semibold cursor-not-allowed'
+                      : errors.doctorId
+                      ? 'bg-slate-50/60 border-rose-300 focus:border-rose-500'
+                      : 'bg-slate-50/60 border-slate-200 focus:border-[#2563EB]'
                   }`}
                 >
                   <option value="">Select an Attending Physician</option>
@@ -516,10 +533,13 @@ export function PatientModal({ isOpen, onClose, patient, onSuccess }: PatientMod
                     </option>
                   ))}
                 </select>
+                {defaultDoctorId && (
+                  <Lock className="absolute right-3.5 h-4 w-4 text-slate-400 pointer-events-none" />
+                )}
               </div>
-              {errors.doctorId && (
+              {errors.doctorId && !defaultDoctorId ? (
                 <p className="text-[11px] text-rose-500 font-medium">{errors.doctorId.message}</p>
-              )}
+              ) : null}
             </div>
 
             {/* Contact Grid: Phone & Email */}

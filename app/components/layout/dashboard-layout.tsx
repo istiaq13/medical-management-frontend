@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Header } from '@/components/layout/header';
-import { useAuth } from '@/contexts/auth.context';
 import { usePathname } from 'next/navigation';
 
 export function DashboardLayout({
@@ -12,7 +11,6 @@ export function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { isLoading, token } = useAuth();
   const pathname = usePathname();
 
   const getHeaderMeta = () => {
@@ -42,17 +40,6 @@ export function DashboardLayout({
 
   const headerMeta = getHeaderMeta();
 
-  if (isLoading || !token) {
-    return (
-      <div className="flex h-screen w-screen items-center justify-center bg-slate-900">
-        <div className="flex flex-col items-center gap-4 text-center">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
-          <p className="text-sm font-medium text-slate-300">Verifying session credentials...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -75,4 +62,3 @@ export function DashboardLayout({
 }
 
 export default DashboardLayout;
-

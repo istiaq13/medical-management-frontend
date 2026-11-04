@@ -623,19 +623,14 @@ export default function DoctorsPage() {
                           <span title={doc.hospital}>{wardCode}</span>
                         </td>
 
-                        {/* Patients Count with Pill Button */}
+                        {/* Patients Count (Non-clickable Pill Badge) */}
                         <td className="py-3.5 px-3 text-center whitespace-nowrap">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setPatientsDoctor(doc);
-                            }}
-                            className="inline-flex items-center gap-1 rounded-full bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-1 text-[11px] font-bold text-[#2563EB] transition cursor-pointer"
-                            title="View/manage corresponding patients"
+                          <span
+                            className="inline-flex items-center gap-1 rounded-full bg-blue-50 border border-blue-200 px-2.5 py-1 text-[11px] font-bold text-[#2563EB] select-none"
                           >
                             <Users className="h-3 w-3 text-[#2563EB]" />
                             <span>{doc.patientCount ?? 0}</span>
-                          </button>
+                          </span>
                         </td>
 
                         {/* Status (Positioned in middle of Patients and Action) */}
