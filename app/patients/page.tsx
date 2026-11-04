@@ -11,6 +11,7 @@ import { patientService } from '@/services/patient.service';
 import { doctorService } from '@/services/doctor.service';
 import { dashboardService } from '@/services/dashboard.service';
 import { formatDate } from '@/lib/utils';
+import { useDebounce } from '@/lib/hooks/use-debounce';
 import { toast } from 'sonner';
 import {
   Users,
@@ -38,6 +39,7 @@ export default function PatientsPage() {
   const router = useRouter();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [condition, setCondition] = useState('');
   const [doctorId, setDoctorId] = useState('');
@@ -73,12 +75,12 @@ export default function PatientsPage() {
 
   // Fetch patients list
   const { data, isLoading, isPlaceholderData, refetch } = useQuery({
-    queryKey: ['patients', page, search, condition, doctorId, gender, startDate, endDate],
+    queryKey: ['patients', page, debouncedSearch, condition, doctorId, gender, startDate, endDate],
     queryFn: () =>
       patientService.getPatients({
         page,
         limit: 10,
-        search,
+        search: debouncedSearch,
         condition,
         doctorId,
         gender,

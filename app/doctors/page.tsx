@@ -11,6 +11,7 @@ import { DeleteDoctorDialog } from './components/delete-doctor-dialog';
 import { doctorService } from '@/services/doctor.service';
 import { dashboardService } from '@/services/dashboard.service';
 import { formatDate } from '@/lib/utils';
+import { useDebounce } from '@/lib/hooks/use-debounce';
 import { toast } from 'sonner';
 import {
   Users,
@@ -40,6 +41,7 @@ export default function DoctorsPage() {
   const router = useRouter();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [specialization, setSpecialization] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -101,12 +103,12 @@ export default function DoctorsPage() {
 
   // Fetch doctors list
   const { data, isLoading, isPlaceholderData, refetch } = useQuery({
-    queryKey: ['doctors', page, search, specialization, startDate, endDate],
+    queryKey: ['doctors', page, debouncedSearch, specialization, startDate, endDate],
     queryFn: () =>
       doctorService.getDoctors({
         page,
         limit: 10,
-        search,
+        search: debouncedSearch,
         specialization,
         startDate,
         endDate,
