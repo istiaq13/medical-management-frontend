@@ -259,7 +259,7 @@ export function AdminModal({ isOpen, onClose, admin, onSuccess }: AdminModalProp
             </label>
             <input
               {...register('name')}
-              placeholder="e.g. Dr. Sarah Jenkins"
+              placeholder="enter name"
               className={`w-full rounded-lg border px-3.5 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 ${
                 errors.name
                   ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-100'
@@ -278,7 +278,7 @@ export function AdminModal({ isOpen, onClose, admin, onSuccess }: AdminModalProp
             <input
               {...register('email')}
               type="email"
-              placeholder="sarah.jenkins@hospital.org"
+              placeholder="enter email"
               className={`w-full rounded-lg border px-3.5 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 ${
                 errors.email
                   ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-100'
@@ -297,7 +297,7 @@ export function AdminModal({ isOpen, onClose, admin, onSuccess }: AdminModalProp
             <input
               {...register('password')}
               type="password"
-              placeholder={isEditing ? '••••••••' : 'At least 6 characters'}
+              placeholder={isEditing ? 'leave blank to keep unchanged' : 'enter password'}
               className={`w-full rounded-lg border px-3.5 py-2.5 text-sm transition-all focus:outline-none focus:ring-2 ${
                 errors.password
                   ? 'border-rose-300 focus:border-rose-400 focus:ring-rose-100'
@@ -307,24 +307,8 @@ export function AdminModal({ isOpen, onClose, admin, onSuccess }: AdminModalProp
             {errors.password && <p className="text-xs text-rose-500">{errors.password.message}</p>}
           </div>
 
-          {/* Role Selection */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-              <Shield className="h-3.5 w-3.5 text-blue-600" />
-              Assigned Role
-            </label>
-            <select
-              {...register('role')}
-              className="w-full rounded-lg border border-slate-200 px-3.5 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 bg-white"
-            >
-              <option value="ADMIN">ADMIN (Full Access & User Management)</option>
-              <option value="DOCTOR">DOCTOR (Clinical Patient Care)</option>
-              <option value="STAFF">STAFF (Front Desk / Medical Assistant)</option>
-            </select>
-            <p className="text-[11px] text-slate-400">
-              Admin users have privileges to manage patients, doctors, roles, and access controls.
-            </p>
-          </div>
+          {/* Hidden Role (Defaults to ADMIN) */}
+          <input type="hidden" {...register('role')} value="ADMIN" />
 
           {/* Footer Action Buttons */}
           <div className="pt-6 border-t border-slate-100 flex items-center justify-end gap-3">

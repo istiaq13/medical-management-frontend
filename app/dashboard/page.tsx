@@ -175,7 +175,9 @@ export default function DashboardPage() {
                 className="rounded-xl border border-slate-100 bg-slate-50/50 p-3.5 transition hover:bg-blue-50/30 hover:border-blue-200"
               >
                 <p className="font-bold text-xs text-slate-900 truncate">
-                  Dr. {doc.name}
+                  {doc.name.replace(/^(dr\.?|doctor)\s+/i, 'Dr. ').startsWith('Dr. ')
+                    ? doc.name.replace(/^(dr\.?|doctor)\s+/i, 'Dr. ')
+                    : `Dr. ${doc.name}`}
                 </p>
                 <div className="flex items-center justify-between gap-2 mt-1.5">
                   <span className="text-[11px] text-slate-500 truncate font-medium">
