@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useQuery } from '@tanstack/react-query';
@@ -12,6 +12,7 @@ import {
   Activity,
   HeartPulse,
   ChevronRight,
+  BarChart3,
 } from 'lucide-react';
 
 const PatientTrendsChart = dynamic(
@@ -35,6 +36,8 @@ const SpecializationChart = dynamic(
 );
 
 export default function DashboardPage() {
+  const [activeGraphTab, setActiveGraphTab] = useState<'patients' | 'doctors'>('patients');
+
   const {
     data: analyticsData,
     isLoading,
@@ -155,9 +158,6 @@ export default function DashboardPage() {
               <h2 className="text-base font-bold text-slate-900">
                 Top Attending Physicians by Patient Volume
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Physicians currently managing high patient intake rosters
-              </p>
             </div>
             <Link
               href="/doctors"
@@ -174,132 +174,166 @@ export default function DashboardPage() {
                 key={doc._id || idx}
                 className="rounded-xl border border-slate-100 bg-slate-50/50 p-3.5 transition hover:bg-blue-50/30 hover:border-blue-200"
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-[#2563EB] font-mono">
-                    #{String(idx + 1).padStart(2, '0')}
+                <p className="font-bold text-xs text-slate-900 truncate">
+                  Dr. {doc.name}
+                </p>
+                <div className="flex items-center justify-between gap-2 mt-1.5">
+                  <span className="text-[11px] text-slate-500 truncate font-medium">
+                    {doc.specialization}
                   </span>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-blue-100/70 px-2 py-0.5 text-[11px] font-bold text-[#2563EB]">
+                  <span className="inline-flex items-center shrink-0 rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-bold text-[#2563EB]">
                     {doc.patientCount} patients
                   </span>
                 </div>
-                <p className="font-bold text-xs text-slate-900 mt-2 truncate">
-                  Dr. {doc.name}
-                </p>
-                <p className="text-[11px] text-slate-400 truncate mt-0.5">
-                  {doc.specialization}
-                </p>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* 3. VISUAL ANALYTICS CHARTS GRID */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* Trend Chart: Monthly Patient Registrations */}
-        <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-xs">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-            <div>
-              <h2 className="text-base font-bold text-slate-900">
-                Monthly Patient Registrations
-              </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Intake velocity and hospital admission trend over time
-              </p>
-            </div>
+      {/* 3. VISUAL ANALYTICS SECTION WITH TOGGLE BUTTONS UP RIGHT SIDE */}
+      <div className="space-y-4">
+        {/* Section Header & Toggle Buttons (Patients / Doctors) */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
+          <div>
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <BarChart3 className="h-4.5 w-4.5 text-blue-600" />
+              {activeGraphTab === 'patients'
+                ? 'Patient Clinical & Registration Analytics'
+                : 'Doctor Workload & Capacity Analytics'}
+            </h3>
           </div>
 
-          <div className="mt-2">
-            {isLoading ? (
-              <Skeleton className="h-72 w-full rounded-xl" />
-            ) : (
-              <PatientTrendsChart data={analyticsData?.dateBasedStats || []} />
-            )}
-          </div>
-        </div>
-
-        {/* Workload Chart: Physician Workload Distribution */}
-        <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-xs">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-            <div>
-              <h2 className="text-base font-bold text-slate-900">
-                Physician Workload Distribution
-              </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Assigned patient caseload per medical practitioner
-              </p>
-            </div>
-            <Link
-              href="/doctors"
-              className="inline-flex items-center gap-1 text-xs font-semibold text-[#2563EB] hover:underline"
+          {/* Up Right Side Toggle Buttons: Patients / Doctors */}
+          <div className="flex items-center rounded-full bg-slate-100 p-1 border border-slate-200/80 self-start sm:self-auto shadow-2xs">
+            <button
+              type="button"
+              onClick={() => setActiveGraphTab('patients')}
+              className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all ${
+                activeGraphTab === 'patients'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              <span>View Doctors</span>
-              <ChevronRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-
-          <div className="mt-2">
-            {isLoading ? (
-              <Skeleton className="h-72 w-full rounded-xl" />
-            ) : (
-              <DoctorWorkloadChart data={analyticsData?.patientsPerDoctor || []} />
-            )}
-          </div>
-        </div>
-
-        {/* Condition Pie Chart: Clinical Diagnosis Breakdown */}
-        <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-xs">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-            <div>
-              <h2 className="text-base font-bold text-slate-900">
-                Patient Diagnosis Breakdown
-              </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Prevalence distribution of active clinical conditions
-              </p>
-            </div>
-            <Link
-              href="/patients"
-              className="inline-flex items-center gap-1 text-xs font-semibold text-[#2563EB] hover:underline"
+              <Users className="h-3.5 w-3.5" />
+              <span>Patients</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveGraphTab('doctors')}
+              className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all ${
+                activeGraphTab === 'doctors'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              <span>View Patients</span>
-              <ChevronRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-
-          <div className="mt-2">
-            {isLoading ? (
-              <Skeleton className="h-72 w-full rounded-xl" />
-            ) : (
-              <ConditionPieChart data={analyticsData?.conditionDistribution || []} />
-            )}
+              <Stethoscope className="h-3.5 w-3.5" />
+              <span>Doctors</span>
+            </button>
           </div>
         </div>
 
-        {/* Specialization Chart: Staffing Capacity */}
-        <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-xs">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-            <div>
-              <h2 className="text-base font-bold text-slate-900">
-                Specialization Staffing Capacity
-              </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Physicians categorized by specialized medical discipline
-              </p>
+        {/* 4. DEDICATED GRAPHS IN ONE LINE */}
+        {activeGraphTab === 'patients' ? (
+          /* Patients Diagrams in One Line */
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {/* Diagram 1: Monthly Patient Registrations */}
+            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-xs overflow-hidden">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div>
+                  <h2 className="text-base font-bold text-slate-900">
+                    Monthly Patient Registrations
+                  </h2>
+                </div>
+              </div>
+
+              <div className="mt-2">
+                {isLoading ? (
+                  <Skeleton className="h-72 w-full rounded-xl" />
+                ) : (
+                  <PatientTrendsChart data={analyticsData?.dateBasedStats || []} />
+                )}
+              </div>
             </div>
-            <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">
-              Staffing Capacity
-            </span>
-          </div>
 
-          <div className="mt-2">
-            {isLoading ? (
-              <Skeleton className="h-72 w-full rounded-xl" />
-            ) : (
-              <SpecializationChart data={analyticsData?.specializationDistribution || []} />
-            )}
+            {/* Diagram 2: Patient Diagnosis Breakdown */}
+            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-xs overflow-hidden">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div>
+                  <h2 className="text-base font-bold text-slate-900">
+                    Patient Diagnosis Breakdown
+                  </h2>
+                </div>
+                <Link
+                  href="/patients"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-[#2563EB] hover:underline"
+                >
+                  <span>View Patients</span>
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+
+              <div className="mt-2">
+                {isLoading ? (
+                  <Skeleton className="h-72 w-full rounded-xl" />
+                ) : (
+                  <ConditionPieChart data={analyticsData?.conditionDistribution || []} />
+                )}
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Doctors Diagrams in One Line */
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {/* Diagram 1: Physician Workload Distribution */}
+            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-xs overflow-hidden">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div>
+                  <h2 className="text-base font-bold text-slate-900">
+                    Physician Workload Distribution
+                  </h2>
+                </div>
+                <Link
+                  href="/doctors"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-[#2563EB] hover:underline"
+                >
+                  <span>View Doctors</span>
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+
+              <div className="mt-2">
+                {isLoading ? (
+                  <Skeleton className="h-72 w-full rounded-xl" />
+                ) : (
+                  <DoctorWorkloadChart data={analyticsData?.patientsPerDoctor || []} />
+                )}
+              </div>
+            </div>
+
+            {/* Diagram 2: Specialization Staffing Capacity */}
+            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-xs overflow-hidden">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div>
+                  <h2 className="text-base font-bold text-slate-900">
+                    Specialization Staffing Capacity
+                  </h2>
+                </div>
+                <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">
+                  Staffing Capacity
+                </span>
+              </div>
+
+              <div className="mt-2">
+                {isLoading ? (
+                  <Skeleton className="h-72 w-full rounded-xl" />
+                ) : (
+                  <SpecializationChart data={analyticsData?.specializationDistribution || []} />
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

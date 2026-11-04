@@ -17,6 +17,29 @@ interface DoctorWorkloadChartProps {
   data: PatientsPerDoctor[];
 }
 
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-xl">
+        <p className="text-xs font-bold text-slate-900">
+          Dr. {data.name?.replace(/^Dr\.\s*/i, '')}
+        </p>
+        <p className="text-[11px] font-medium text-slate-500 mt-0.5">
+          {data.specialization}
+        </p>
+        <div className="mt-2 flex items-center gap-2 border-t border-slate-100 pt-2">
+          <span className="h-2 w-2 rounded-full bg-blue-600" />
+          <p className="text-xs font-bold text-blue-600">
+            {data.patientCount} <span className="font-semibold text-slate-700">Assigned Patients</span>
+          </p>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
 export function DoctorWorkloadChart({ data }: DoctorWorkloadChartProps) {
   if (!data || data.length === 0) {
     return (
@@ -52,19 +75,8 @@ export function DoctorWorkloadChart({ data }: DoctorWorkloadChartProps) {
             allowDecimals={false}
           />
           <Tooltip
-            contentStyle={{
-              backgroundColor: '#0f172a',
-              borderRadius: '12px',
-              border: 'none',
-              color: '#ffffff',
-              fontSize: '12px',
-              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.2)',
-              padding: '10px 14px',
-            }}
-            formatter={(value: any, _, item: any) => [
-              `${value} Patients`,
-              `${item.payload.name} (${item.payload.specialization})`,
-            ]}
+            content={<CustomTooltip />}
+            cursor={{ fill: 'rgba(37, 99, 235, 0.06)' }}
           />
           <Bar dataKey="patientCount" radius={[6, 6, 0, 0]} fill="#2563EB">
             {formattedData.map((_, index) => (

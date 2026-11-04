@@ -16,6 +16,26 @@ interface PatientTrendsChartProps {
   data: DateBasedStat[];
 }
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-xl">
+        <p className="text-[11px] font-semibold tracking-wide text-slate-500 uppercase">
+          Month: <span className="text-slate-900 font-bold">{label}</span>
+        </p>
+        <div className="mt-1.5 flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-blue-600" />
+          <p className="text-sm font-extrabold text-blue-600">
+            {payload[0].value}{' '}
+            <span className="text-xs font-semibold text-slate-700">Patients Registered</span>
+          </p>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
 export function PatientTrendsChart({ data }: PatientTrendsChartProps) {
   if (!data || data.length === 0) {
     return (
@@ -63,17 +83,8 @@ export function PatientTrendsChart({ data }: PatientTrendsChartProps) {
             allowDecimals={false}
           />
           <Tooltip
-            contentStyle={{
-              backgroundColor: '#0f172a',
-              borderRadius: '12px',
-              border: 'none',
-              color: '#ffffff',
-              fontSize: '12px',
-              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.2)',
-              padding: '10px 14px',
-            }}
-            formatter={(value: any) => [`${value} Patients`, 'Registrations']}
-            labelFormatter={(label) => `Month: ${label}`}
+            content={<CustomTooltip />}
+            cursor={{ stroke: '#2563EB', strokeWidth: 1.5, strokeDasharray: '4 4' }}
           />
           <Area
             type="monotone"
@@ -82,6 +93,7 @@ export function PatientTrendsChart({ data }: PatientTrendsChartProps) {
             strokeWidth={2.5}
             fillOpacity={1}
             fill="url(#patientTrendGrad)"
+            activeDot={{ r: 6, fill: '#2563EB', stroke: '#ffffff', strokeWidth: 2 }}
           />
         </AreaChart>
       </ResponsiveContainer>
