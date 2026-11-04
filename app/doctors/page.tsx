@@ -102,7 +102,7 @@ export default function DoctorsPage() {
   const [deletingDoctor, setDeletingDoctor] = useState<Doctor | null>(null);
 
   // Fetch doctors list
-  const { data, isLoading, isPlaceholderData, refetch } = useQuery({
+  const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['doctors', page, debouncedSearch, specialization, startDate, endDate],
     queryFn: () =>
       doctorService.getDoctors({
@@ -113,7 +113,6 @@ export default function DoctorsPage() {
         startDate,
         endDate,
       }),
-    placeholderData: (prev) => prev,
   });
 
   // Fetch analytics for the top 4 overview cards
@@ -533,7 +532,7 @@ export default function DoctorsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200/40">
-                {isLoading ? (
+                {isLoading || isFetching ? (
                   Array.from({ length: 10 }).map((_, i) => (
                     <tr key={i} className="py-3 border-b border-slate-200/30">
                       <td className="p-3"><Skeleton className="h-4 w-16" /></td>
@@ -706,7 +705,7 @@ export default function DoctorsPage() {
             {/* Previous Circle Button */}
             <button
               onClick={() => setPage(meta.page - 1)}
-              disabled={meta.page <= 1 || isLoading}
+              disabled={meta.page <= 1}
               className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E2E8F0]/80 hover:bg-slate-300 disabled:opacity-40 text-slate-700 transition cursor-pointer"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -732,7 +731,7 @@ export default function DoctorsPage() {
             {/* Next Circle Button (Solid Blue) */}
             <button
               onClick={() => setPage(meta.page + 1)}
-              disabled={meta.page >= meta.totalPages || isLoading}
+              disabled={meta.page >= meta.totalPages}
               className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] disabled:opacity-40 text-white transition cursor-pointer shadow-xs"
             >
               <ChevronRight className="h-4 w-4" />

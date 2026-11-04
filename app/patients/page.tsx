@@ -74,7 +74,7 @@ export default function PatientsPage() {
   });
 
   // Fetch patients list
-  const { data, isLoading, isPlaceholderData, refetch } = useQuery({
+  const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['patients', page, debouncedSearch, condition, doctorId, gender, startDate, endDate],
     queryFn: () =>
       patientService.getPatients({
@@ -85,7 +85,6 @@ export default function PatientsPage() {
         doctorId,
         gender,
       }),
-    placeholderData: (prev) => prev,
   });
 
   // Fetch analytics for the top 4 overview cards
@@ -544,7 +543,7 @@ export default function PatientsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200/40">
-              {isLoading ? (
+              {isLoading || isFetching ? (
                 Array.from({ length: 8 }).map((_, i) => (
                   <tr key={i} className="animate-pulse">
                     <td className="py-4 px-3"><Skeleton className="h-3.5 w-14 rounded" /></td>
@@ -738,7 +737,7 @@ export default function PatientsPage() {
             {/* Prev Circle Button */}
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page <= 1 || isLoading}
+              disabled={page <= 1}
               className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E2E8F0]/80 hover:bg-slate-300 disabled:opacity-40 text-slate-700 transition cursor-pointer"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -764,7 +763,7 @@ export default function PatientsPage() {
             {/* Next Circle Button (Solid Blue) */}
             <button
               onClick={() => setPage((p) => (meta.hasNextPage ? p + 1 : p))}
-              disabled={!meta.hasNextPage || isLoading}
+              disabled={!meta.hasNextPage}
               className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] disabled:opacity-40 text-white transition cursor-pointer shadow-xs"
             >
               <ChevronRight className="h-4 w-4" />
