@@ -175,7 +175,7 @@ export default function LoginPage() {
                 </label>
                 <input
                   type="email"
-                  placeholder="admin@example.com"
+                  placeholder="enter email"
                   className="w-full bg-transparent text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
                   {...register('email')}
                 />
@@ -198,7 +198,7 @@ export default function LoginPage() {
                 <div className="flex items-center justify-between">
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="••••••••"
+                    placeholder="enter password"
                     className="w-full bg-transparent text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
                     {...register('password')}
                   />
